@@ -21,7 +21,22 @@
     </el-header>
     <el-container class="my-container">
       <!-- 侧边栏 -->
-      <el-aside class="my-aside" width="200px">Aside</el-aside>
+      <el-aside class="my-aside" width="200px">
+        <!-- 使用饿了么ui的 导航栏实现 -->
+        <el-menu default-active="2" class="el-menu-vertical-demo">
+          <el-submenu index="1">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>导航一</span>
+            </template>
+            <el-menu-item index="1-1">
+              <!-- 字体图标class="el-icon-menu" -->
+              <span class="el-icon-menu"></span>选项1
+            </el-menu-item>
+          </el-submenu>
+        </el-menu>
+      </el-aside>
+      
       <!-- 主体区域 -->
       <el-main class="my-main">Main</el-main>
     </el-container>
