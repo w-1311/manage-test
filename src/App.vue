@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <!-- 设置出坣 -->
+  <div class="app">
+    <!-- 设置出口-->
     <router-view></router-view>
   </div>
 </template>
@@ -12,7 +12,7 @@ export default {
 </script>
 
 <style>
-/* ???? */
+/* 设置高度 */
 .app {
   height: 100%;
 }

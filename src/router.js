@@ -25,5 +25,5 @@ let routes = [
     routes
   })
   
-  // 暴露
+  // 暴露出去
   export default router
