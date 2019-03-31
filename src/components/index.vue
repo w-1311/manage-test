@@ -15,7 +15,8 @@
         </el-col>
         <el-col :span="2">
           <!-- 按钮 -->
-          <el-button type="success">退出</el-button>
+          <!-- 绑定点击事件 -->
+          <el-button type="success" @click="logout">退出</el-button>
         </el-col>
       </el-row>
     </el-header>
@@ -48,7 +49,15 @@
 
 <script>
 export default {
-  name: "index"
+  name: "index",
+  methods: {
+    logout() {
+      // 删除缓存
+      window.sessionStorage.removeItem("token");
+      // 编程式导航 去登录页 会员登录
+      this.$router.push("/login");
+    }
+  },
 };
 </script>
 

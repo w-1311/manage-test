@@ -5,7 +5,13 @@
     <div class="box">
       <h2>用户登录</h2>
       <!-- 饿了么ui的from -->
-      <el-form label-position="top" ref="loginForm" :model="loginForm" :rules="rules" label-width="80px">
+      <el-form
+        label-position="top"
+        ref="loginForm"
+        :model="loginForm"
+        :rules="rules"
+        label-width="80px"
+      >
         <el-form-item label="用户名" prop="username">
           <el-input v-model="loginForm.username"></el-input>
         </el-form-item>
@@ -13,8 +19,8 @@
           <el-input v-model="loginForm.password"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button  type="primary" @click="submit('loginForm')">登录</el-button>
-          <el-button  type="primary" @click="resetForm('loginForm')">重置</el-button>
+          <el-button type="primary" @click="submit('loginForm')">登录</el-button>
+          <el-button type="primary" @click="resetForm('loginForm')">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -56,10 +62,22 @@ export default {
   // 方法
   methods: {
     // 表单提交  获取饿了么的表单  调用验证方法
-    submit(formName) {
-      this.$refs[formName].validate(valid => {
+    submit(formName) {//使用async修饰函数
+    alert(11)
+      this.$refs[formName].validate(async valid => {
         if (valid) {
-          //成功  提交数据
+          //成功  提交数据  使用await 登录异步操作的结束
+           let res = await this.$axios.post("login", this.loginForm);
+          console.log(res);
+           if (res.data.meta.status === 400) {//根据状态不同的提示框
+            this.$message.error(res.data.meta.msg);
+          } else if (res.data.meta.status === 200) {
+            this.$message.success(res.data.meta.msg);
+            // 缓存数据
+            window.sessionStorage.setItem("token", res.data.data.token);
+            // 跳转 到主页
+            this.$router.push("/");
+          }
         } else {
           // 失败
           this.$message.error("数据格式错误,请根据提示修改!");
