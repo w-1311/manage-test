@@ -29,16 +29,19 @@
               <i class="el-icon-location"></i>
               <span>导航一</span>
             </template>
-            <el-menu-item index="1-1">
+            <el-menu-item index="users">
               <!-- 字体图标class="el-icon-menu" -->
               <span class="el-icon-menu"></span>选项1
             </el-menu-item>
           </el-submenu>
         </el-menu>
       </el-aside>
-      
+
       <!-- 主体区域 -->
-      <el-main class="my-main">Main</el-main>
+      <el-main class="my-main">
+        <!-- 出口 -->
+        <router-view></router-view>
+      </el-main>
     </el-container>
   </el-container>
 </template>
@@ -53,8 +56,8 @@ export default {
 // 使用scss编写样式
 .index-container {
   height: 100%;
-  display: flex;
-  flex-direction: column;
+  // display: flex;
+  // flex-direction: column;
   .my-header {
     height: 60px;
     background-color: #b3c0d1;
@@ -72,7 +75,8 @@ export default {
       background-color: skyblue;
     }
     .my-main {
-      background-color: hotpink;
+      background-color: #e9eef3;
+      padding-top: 0;
     }
   }
 }
