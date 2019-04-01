@@ -63,7 +63,6 @@ export default {
   methods: {
     // 表单提交  获取饿了么的表单  调用验证方法
     submit(formName) {//使用async修饰函数
-    alert(11)
       this.$refs[formName].validate(async valid => {
         if (valid) {
           //成功  提交数据  使用await 登录异步操作的结束
