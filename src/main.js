@@ -29,7 +29,7 @@ axios.interceptors.request.use(
     // Do something with request error
     return Promise.reject(error);
   }
-)
+);
 
 // 响应拦截器 统一处理响应
 axios.interceptors.response.use(
@@ -37,7 +37,13 @@ axios.interceptors.response.use(
     // Do something with response data
     console.log("响应拦截");
     console.log(response);
-    Vue.prototype.$message.success(response.data.meta.msg);
+    // 统一进行弹框  成功状态码
+    if ([200, 201, 204].indexOf(response.data.meta.status) != -1) {
+      Vue.prototype.$message.success(response.data.meta.msg);
+    } else {
+      // 否则就是失败
+      Vue.prototype.$message.warning(response.data.meta.msg);
+    }
     return response;
   },
   function(error) {

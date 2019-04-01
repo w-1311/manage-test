@@ -9,7 +9,12 @@
     <!--输入框 -->
     <el-row>
       <el-col :span="6">
-        <el-input placeholder="请输入内容" v-model="sendData.query"  @keyup.native.enter="search" class="input-with-select">
+        <el-input
+          placeholder="请输入内容"
+          v-model="sendData.query"
+          @keyup.native.enter="search"
+          class="input-with-select"
+        >
           <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
         </el-input>
       </el-col>
@@ -26,7 +31,12 @@
       <el-table-column prop="mg_state" label="用户状态">
         <!-- scope 是一个名字 -->
         <template slot-scope="scope">
-          <el-switch  v-model="scope.row.mg_state" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+          <el-switch
+            @change="stateChange(scope.row)"
+            v-model="scope.row.mg_state"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+          ></el-switch>
         </template>
       </el-table-column>
       <el-table-column prop="address" label="操作">
@@ -90,6 +100,12 @@ export default {
       // console.log(res);
       this.total = res.data.data.total;
       this.userList = res.data.data.users;
+    },
+    // 状态改变
+    stateChange(row) {
+      // console.log(row);
+      // 接口调用
+      this.$axios.put(`users/${row.id}/state/${row.mg_state}`);
     }
   },
   // 接口调用
