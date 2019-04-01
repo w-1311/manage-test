@@ -19,7 +19,7 @@
         </el-input>
       </el-col>
       <el-col :span="12">
-        <el-button type="success" plain>添加用户</el-button>
+        <el-button type="success" @click="addFormVisible=true" plain>添加用户</el-button>
       </el-col>
     </el-row>
     <!-- 表格 -->
@@ -62,6 +62,28 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
     ></el-pagination>
+
+    <!-- 新增弹框 -->
+    <el-dialog title="添加用户" :visible.sync="addFormVisible">
+      <el-form :model="addForm" :rules="addRules" ref="addForm">
+        <el-form-item label="用户名" label-width="100px" prop="username">
+          <el-input v-model="addForm.username" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" label-width="100px" prop="password">
+          <el-input v-model="addForm.password" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" label-width="100px">
+          <el-input v-model="addForm.email" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="电话" label-width="100px">
+          <el-input v-model="addForm.mobile" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="addFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitAdd('addForm')">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -79,7 +101,26 @@ export default {
         pagesize: 10
       },
       // 用户数组
-      userList: []
+      userList: [],
+      // 是否显示新增对话框
+      addFormVisible: false,
+      // 新增表单
+      addForm: {
+        username: "新增",
+        password: "123456",
+        email: "littleice@qq.com",
+        mobile: "18888888888"
+      },
+      // 新增表单的验证规则
+      addRules: {
+        username: [
+          { required: true, message: "用户名不能为空", trigger: "blur" }
+        ],
+        password: [
+          { required: true, message: "密码不能为空", trigger: "blur" },
+          { min: 6, max: 16, message: "密码长度6-16之间", trigger: "blur" }
+        ]
+      }
     };
   },
   methods: {
@@ -106,6 +147,17 @@ export default {
       // console.log(row);
       // 接口调用
       this.$axios.put(`users/${row.id}/state/${row.mg_state}`);
+    },
+    // 提交新增
+    submitAdd(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          alert("submit!");
+        } else {
+          this.$message.error("哥们，亲正确输入数据");
+          return false;
+        }
+      });
     }
   },
   // 接口调用
