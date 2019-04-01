@@ -10,7 +10,7 @@
     <el-row>
       <el-col :span="6">
         <el-input placeholder="请输入内容" v-model="sendData.query" class="input-with-select">
-          <el-button slot="append" icon="el-icon-search" ></el-button>
+          <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
         </el-input>
       </el-col>
       <el-col :span="12">
@@ -19,7 +19,7 @@
     </el-row>
     <!-- 表格 -->
     <el-table :data="userList" style="width: 100%">
-      <el-table-column type="index"  width="50"></el-table-column>
+      <el-table-column type="index" width="50"></el-table-column>
       <el-table-column prop="username" label="姓名" width="180"></el-table-column>
       <el-table-column prop="email" label="邮箱" width="180"></el-table-column>
       <el-table-column prop="mobile" label="电话"></el-table-column>
@@ -77,19 +77,23 @@ export default {
     async handleEdit(index, row) {
       console.log(index); // 索引
       console.log(row); // 数据
+    },
+    // 搜索用户
+    async search() {
+      let res = await this.$axios.get("users", {
+        headers: {
+          Authorization: window.sessionStorage.getItem("token")
+        },
+        params: this.sendData
+      });
+      // console.log(res);
+      this.total = res.data.data.total;
+      this.userList = res.data.data.users;
     }
   },
   // 接口调用
   async created() {
-    let res = await this.$axios.get("users", {
-      headers: {
-        Authorization: window.sessionStorage.getItem("token")
-      },
-      params: this.sendData
-    });
-    // console.log(res);
-    this.total = res.data.data.total;
-    this.userList = res.data.data.users;
+    this.search();
   }
 };
 </script>
