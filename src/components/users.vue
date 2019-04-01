@@ -9,7 +9,7 @@
     <!--输入框 -->
     <el-row>
       <el-col :span="6">
-        <el-input placeholder="请输入内容" v-model="sendData.query" class="input-with-select">
+        <el-input placeholder="请输入内容" v-model="sendData.query"  @keyup.native.enter="search" class="input-with-select">
           <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
         </el-input>
       </el-col>
@@ -26,7 +26,7 @@
       <el-table-column prop="mg_state" label="用户状态">
         <!-- scope 是一个名字 -->
         <template slot-scope="scope">
-          <el-switch v-model="scope.row.mg_state" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+          <el-switch  v-model="scope.row.mg_state" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
         </template>
       </el-table-column>
       <el-table-column prop="address" label="操作">
@@ -81,9 +81,10 @@ export default {
     // 搜索用户
     async search() {
       let res = await this.$axios.get("users", {
-        headers: {
-          Authorization: window.sessionStorage.getItem("token")
-        },
+        // 已设置拦截器设置token 不用在单独设置
+        // headers: {
+        //   Authorization: window.sessionStorage.getItem("token")
+        // },
         params: this.sendData
       });
       // console.log(res);
