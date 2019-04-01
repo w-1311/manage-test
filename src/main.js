@@ -10,6 +10,10 @@ import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 Vue.use(ElementUI);
 
+// 全局注册面包屑组件
+import myBread from './components/myBread.vue'
+Vue.component('my-bread', myBread)
+
 // 导入axios cnpm i axios --save
 import axios from "axios";
 
