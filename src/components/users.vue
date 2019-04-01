@@ -57,7 +57,13 @@
             icon="el-icon-delete"
             plain
           ></el-button>
-          <el-button type="warning" size="mini" icon="el-icon-check" plain></el-button>
+          <el-button
+            type="warning"
+            @click="showRole(scope.row)"
+            size="mini"
+            icon="el-icon-check"
+            plain
+          ></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -109,6 +115,26 @@
         <el-button type="primary" @click="submitEdit('editForm')">确 定</el-button>
       </div>
     </el-dialog>
+    <!-- 角色设置 -->
+    <el-dialog title="用户角色" :visible.sync="roleFormVisible">
+      <el-form ref="editForm">
+        <el-form-item label="当前用户" label-width="100px">{{editUser.username}}</el-form-item>
+        <el-form-item label="请选择角色" label-width="100px">
+          <el-select v-model="editUser.role_name" placeholder="请选择">
+            <el-option
+              v-for="item in roleList"
+              :key="item.id"
+              :label="item.roleName"
+              :value="item.id"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="roleFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitRole('editForm')">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -131,6 +157,12 @@ export default {
       addFormVisible: false,
       // 是否显示编辑对话框
       editFormVisible: false,
+      // 是否显示角色对话框
+      roleFormVisible: false,
+      // 当前正在编辑的用户信息
+      editUser: {},
+      // 用户角色列表
+      roleList: [],
       // 新增表单
       addForm: {
         username: "新增",
@@ -243,6 +275,28 @@ export default {
             message: "你真好o(^▽^)o"
           });
         });
+    },
+    // 弹出角色框
+    async showRole(row) {
+      this.roleFormVisible = true;
+      // 保存编辑的用户信息
+      this.editUser = row;
+      // 获取所有的角色列表
+      let res = await this.$axios.get("roles");
+      // console.log(res);
+      this.roleList = res.data.data;
+    },
+    // 分配角色
+    async submitRole(formName) {
+      // 获取用户id
+      // 获取角色id
+      let res = await this.$axios.put(`users/${this.editUser.id}/role`, {
+        rid: this.editUser.role_name
+      });
+      if (res.data.meta.status === 200) {
+        this.search();
+      }
+      this.roleFormVisible = false;
     }
   },
   // 接口调用
