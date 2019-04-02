@@ -7,6 +7,12 @@ Vue.use(VueRouter);
 import login from "./components/login.vue";
 import index from "./components/index.vue";
 import users from "./components/users.vue";
+import roles from './components/roles.vue'
+import rights from './components/rights.vue'
+import goods from './components/goods.vue'
+import categories from './components/categories.vue'
+import orders from './components/orders.vue'
+
 
 // 规则
 let routes = [
@@ -20,9 +26,29 @@ let routes = [
     // 嵌套路由
     children: [
       {
-        path: "users",
+        path: "users",// /index/users
         component: users
-      }
+      },
+      {
+        path: 'roles', // /index/roles
+        component: roles
+      },
+      {
+        path: 'rights', // /index/rights
+        component: rights
+      },
+      {
+        path: 'goods', // /index/goods
+        component: goods
+      },
+      {
+        path: 'categories', // /index/categories
+        component: categories
+      },
+      {
+        path: 'orders', // /index/orders
+        component: orders
+      },
     ]
   },
 ];

@@ -24,7 +24,7 @@
       <!-- 侧边栏 -->
       <el-aside class="my-aside" width="200px">
         <!-- 使用饿了么ui的 导航栏实现 -->
-        <el-menu router default-active="2" class="el-menu-vertical-demo">
+        <el-menu router default-active="users" class="el-menu-vertical-demo">
           <el-submenu :index="item.id+''" v-for="item in menuList">
             <template slot="title">
               <i class="el-icon-location"></i>
@@ -32,7 +32,8 @@
             </template>
             <el-menu-item :index="it.path" v-for="it in item.children">
               <!-- 字体图标class="el-icon-menu" -->
-              <span class="el-icon-menu"></span>{{it.authName}}
+              <span class="el-icon-menu"></span>
+              {{it.authName}}
             </el-menu-item>
           </el-submenu>
         </el-menu>
