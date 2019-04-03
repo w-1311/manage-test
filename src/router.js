@@ -15,12 +15,12 @@ import orders from "./components/orders.vue";
 import params from "./components/params.vue";
 import reports from "./components/reports.vue";
 // 统一的错误页
-import error from './components/error.vue'
+import error from "./components/error.vue";
 
 // 规则
 let routes = [
   {
-    path: '/error',
+    path: "/error",
     component: error
   },
   {
@@ -89,6 +89,15 @@ router.beforeEach((to, from, next) => {
   // console.log(from)
   // next()
   // if(to.path==='/login'){
+
+  // 如果没有匹配统一跳转error页面
+  if (to.matched.length === 0) {
+    // 提示
+    Vue.prototype.$message.error("哥们，你输入的地址不对哦，检查一下把");
+    // 没有匹配
+    next("/error");
+  }
+
   // 如果meta字段的noLogin为true 就是登录页 直接放行
   if (to.meta.noLogin === true) {
     // 直接去
