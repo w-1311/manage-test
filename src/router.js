@@ -12,6 +12,8 @@ import rights from './components/rights.vue'
 import goods from './components/goods.vue'
 import categories from './components/categories.vue'
 import orders from './components/orders.vue'
+import params from './components/params.vue'
+import reports from './components/reports.vue'
 
 
 // 规则
@@ -49,6 +51,14 @@ let routes = [
         path: 'orders', // /index/orders
         component: orders
       },
+      {
+        path: 'params', // /index/params
+        component: params
+      },
+      {
+        path: 'reports', // /index/reports
+        component: reports
+      }
     ]
   },
 ];
