@@ -68,11 +68,12 @@ export default {
   // 不需要获取组件中的数据 只是缓存数据 跟组件无关  尽可能早即可
   beforeCreate() {
     // 进行登录判断,没有token打回登录页
-    if (window.sessionStorage.getItem("token")) {
-    } else {
-      this.$message.error("哥们，先登录");
-      this.$router.push("/login");
-    }
+    // 使用导航守卫进行判断 这部分逻辑可以移除了
+    // if (window.sessionStorage.getItem("token")) {
+    // } else {
+    //   this.$message.error("哥们，先登录");
+    //   this.$router.push("/login");
+    // }
   },
   // 钩子函数
   async created() {
