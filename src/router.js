@@ -14,9 +14,15 @@ import categories from "./components/categories.vue";
 import orders from "./components/orders.vue";
 import params from "./components/params.vue";
 import reports from "./components/reports.vue";
+// 统一的错误页
+import error from './components/error.vue'
 
 // 规则
 let routes = [
+  {
+    path: '/error',
+    component: error
+  },
   {
     path: "/login",
     component: login,
