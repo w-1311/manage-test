@@ -32,7 +32,13 @@
             icon="el-icon-delete"
             plain
           ></el-button>
-          <el-button type="warning" size="mini" icon="el-icon-check" plain></el-button>
+          <el-button
+            @click="showTree(scope.row)"
+            type="warning"
+            size="mini"
+            icon="el-icon-check"
+            plain
+          ></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -66,6 +72,22 @@
         <el-button type="primary" @click="submitEdit('editForm')">确 定</el-button>
       </div>
     </el-dialog>
+    <!-- 树形菜单对话框 -->
+    <el-dialog title="分配权限" :visible.sync="treeVisible">
+      <el-tree
+        :data="rightList"
+        show-checkbox
+        node-key="id"
+        ref="tree"
+        default-expand-all
+        :default-checked-keys="checkedKeys"
+        :props="defaultProps"
+      ></el-tree>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="treeVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitTree">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -79,11 +101,25 @@ export default {
       // 标记字段
       addFormVisible: false,
       editFormVisible: false,
+      treeVisible: false,
+      // 树形菜单的数据
+      rightList: [],
+      // 选中的选项
+      checkedKeys: [],
+      // tree菜单的设置
+      defaultProps: {
+        // 告诉树形菜单 数据的属性名是什么
+        children: "children",
+        label: "authName"
+      },
       // 新增的表单
       addForm: {
         roleName: "",
-        roleDesc: ""
+        roleDesc: "",
+        id: 0
       },
+      // 当前操纵tree的角色
+      treeItem: {},
       // 编辑的表单
       editForm: {
         roleName: "",
@@ -179,6 +215,50 @@ export default {
           return false;
         }
       });
+    },
+    // 显示树形菜单对话框
+    async showTree(row) {
+      // 所有的数据
+      let res = await this.$axios.get("rights/tree");
+      // console.log(res);
+      this.rightList = res.data.data;
+      // 设置选中的节点
+      let checkedKeys = [];
+      // 函数
+      function getCheckedKeys(item) {
+        // 退出条件
+        if (item.children) {
+          item.children.forEach(v => {
+            checkedKeys.push(v.id);
+            getCheckedKeys(v);
+          });
+        }
+      }
+      getCheckedKeys(row);
+      // console.log(checkedKeys);
+      // 设置到data中
+      this.checkedKeys = checkedKeys;
+      // 弹框
+      this.treeVisible = true;
+      // 保存当前编辑的角色信息
+      this.treeItem = row;
+    },
+    // 提交选择的权限(角色授权)
+    async submitTree() {
+      // 获取选中的id
+      // console.log(this.$refs.tree.getCheckedKeys());
+      let rids = this.$refs.tree.getCheckedKeys().join(",");
+      // console.log(rids);
+      // 接口调用
+      let res = await this.$axios.post(`roles/${this.treeItem.id}/rights`, {
+        rids
+      });
+      // console.log(res);
+      if (res.data.meta.status === 200) {
+        this.getRoles();
+      }
+      // 关闭弹框
+      this.treeVisible = false;
     }
   },
   // 接口调用
