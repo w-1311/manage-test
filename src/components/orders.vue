@@ -21,7 +21,7 @@
 
       <el-table-column label="操作">
         <!-- scope 是一个名字 -->
-        <template slot-scope="scope">
+        <template >
           <!-- 我们可以通过scope.$index 获取索引 scope.row获取这一行的数据 -->
           <el-button
             @click="dialogFormVisible=true"
@@ -45,14 +45,14 @@
     ></el-pagination>
     <!-- 对话框 -->
     <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
-      <el-form :model="form">
-        <el-form-item label="省市区" :label-width="formLabelWidth">
+      <el-form >
+        <el-form-item label="省市区" label-width="120px">
           <!-- 级联选择器实现 -->
           <el-cascader :options="options" v-model="selectedOptions"></el-cascader>
           <!-- v-distpicker实现 -->
           <v-distpicker></v-distpicker>
         </el-form-item>
-        <el-form-item label="详细地址" :label-width="formLabelWidth">
+        <el-form-item label="详细地址" label-width="120px">
           <el-input placeholder></el-input>
         </el-form-item>
       </el-form>
@@ -102,7 +102,7 @@ export default {
       let res = await this.$axios.get("orders", {
         params: this.sendData
       });
-      console.log(res);
+      // console.log(res);
       this.orderList = res.data.data.goods;
       this.total = res.data.data.total;
     },

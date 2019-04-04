@@ -190,8 +190,8 @@ export default {
   methods: {
     // 编辑按钮的点击事件
     async handleEdit(index, row) {
-      console.log(index); // 索引
-      console.log(row); // 数据
+      // console.log(index); // 索引
+      // console.log(row); // 数据
       let res = await this.$axios.get(`users/${row.id}`);
       // console.log(res);
       this.editForm = res.data.data;
@@ -240,7 +240,7 @@ export default {
       });
     },
     // 保存修改
-    async submitEdit(formName) {
+    async submitEdit() {
       // 修改的字段可以为空 这个不用表单验证
       // 直接发请求即可
       let res = await this.$axios.put(`users/${this.editForm.id}`, {
@@ -286,7 +286,7 @@ export default {
       this.roleList = res.data.data;
     },
     // 分配角色
-    async submitRole(formName) {
+    async submitRole() {
       // 获取用户id
       // 获取角色id
       let res = await this.$axios.put(`users/${this.editUser.id}/role`, {
