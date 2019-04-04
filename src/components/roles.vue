@@ -18,8 +18,20 @@
         <!-- scope 是一个名字 -->
         <template slot-scope="scope">
           <!-- 我们可以通过scope.$index 获取索引 scope.row获取这一行的数据 -->
-          <el-button type="primary"  @click="enterEdit(scope.row)" size="mini" icon="el-icon-edit" plain></el-button>
-          <el-button type="danger" size="mini" icon="el-icon-delete" plain></el-button>
+          <el-button
+            type="primary"
+            @click="enterEdit(scope.row)"
+            size="mini"
+            icon="el-icon-edit"
+            plain
+          ></el-button>
+          <el-button
+            type="danger"
+            @click="delRole(scope.row)"
+            size="mini"
+            icon="el-icon-delete"
+            plain
+          ></el-button>
           <el-button type="warning" size="mini" icon="el-icon-check" plain></el-button>
         </template>
       </el-table-column>
@@ -111,6 +123,28 @@ export default {
           return false;
         }
       });
+    },
+    // 删除角色
+    delRole(row) {
+      // console.log(row);
+      this.$confirm("此操作将永久删除该角色, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(async () => {
+          let res = await this.$axios.delete(`roles/${row.id}`);
+          // console.log(res);
+          if (res.data.meta.status === 200) {
+            this.getRoles();
+          }
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
     },
     // 进入编辑状态
     async enterEdit(row) {
