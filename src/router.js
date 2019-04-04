@@ -85,7 +85,7 @@ let router = new VueRouter({
   next 继续向后执行 跟express的中间件中的next类似
 * */
 router.beforeEach((to, from, next) => {
-  console.log(to);
+  // console.log(to);
   // console.log(from)
   // next()
   // if(to.path==='/login'){

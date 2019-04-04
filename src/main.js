@@ -14,6 +14,14 @@ Vue.use(ElementUI);
 import myBread from './components/myBread.vue'
 Vue.component('my-bread', myBread)
 
+// 全局过滤器
+// 导入moment
+import moment from 'moment'
+Vue.filter('formatTime', (value,formatTem)=>{
+  // 使用过滤器的参数 来格式化时间
+  return moment(value).format(formatTem)
+})
+
 // 导入我的axios插件
 import myaxios from './myaxios.js'
 // use一下
