@@ -23,12 +23,7 @@
         <!-- scope 是一个名字 -->
         <template slot-scope="scope">
           <!-- 我们可以通过scope.$index 获取索引 scope.row获取这一行的数据 -->
-          <el-button
-            type="primary"
-            size="mini"
-            icon="el-icon-edit"
-            plain
-          ></el-button>
+          <el-button type="primary" size="mini" icon="el-icon-edit" plain></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -39,6 +34,8 @@
       :current="sendData.pagenum"
       layout="total, sizes, prev, pager, next, jumper"
       :total="total"
+      @size-change="sizeChange"
+      @current-change="currentChange"
     ></el-pagination>
   </div>
 </template>
@@ -58,13 +55,32 @@ export default {
     };
   },
 
-  async created() {
-    let res = await this.$axios.get("orders", {
-      params: this.sendData
-    });
-    console.log(res);
-    this.orderList = res.data.data.goods;
-    this.total = res.data.data.total;
+  // 方法
+  methods: {
+    // 数据的获取方法
+    async getOrders() {
+      let res = await this.$axios.get("orders", {
+        params: this.sendData
+      });
+      console.log(res);
+      this.orderList = res.data.data.goods;
+      this.total = res.data.data.total;
+    },
+    sizeChange(size) {
+      // 赋值
+      this.sendData.pagesize = size;
+      // 重新获取数据
+      this.getOrders();
+    },
+    currentChange(current) {
+      // 赋值
+      this.sendData.pagenum = current;
+      // 重新获取数据
+      this.getOrders();
+    }
+  },
+  created() {
+    this.getOrders();
   }
 };
 </script>
