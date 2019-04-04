@@ -24,6 +24,21 @@
         </template>
       </el-table-column>
     </el-table>
+    <!-- 新增对话框 -->
+    <el-dialog title="新增角色" :visible.sync="addFormVisible">
+      <el-form :model="addForm" ref="addForm" :rules="rules">
+        <el-form-item label="角色名称" prop="roleName" label-width="100">
+          <el-input v-model="addForm.roleName" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="角色描述" label-width="100">
+          <el-input v-model="addForm.roleDesc" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="addFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitAdd('addForm')">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -33,7 +48,20 @@ export default {
   data() {
     // 角色列表
     return {
-      roleList: [{}, {}]
+      roleList: [{}, {}],
+      // 标记字段
+      addFormVisible: false,
+      // 新增的表单
+      addForm: {
+        roleName: "",
+        roleDesc: ""
+      },
+      // 验证规则
+      rules: {
+        roleName: [
+          { required: true, message: "角色名称不能为空", trigger: "blur" }
+        ]
+      }
     };
   },
   //方法
@@ -42,6 +70,26 @@ export default {
       let res = await this.$axios.get("roles");
       // console.log(res);
       this.roleList = res.data.data;
+    },
+    // 新增角色
+    submitAdd(formName) {
+      this.$refs[formName].validate(async valid => {
+        if (valid) {
+          // 验证成功
+          let res = await this.$axios.post("roles", this.addForm);
+          // console.log(res);
+          if (res.data.meta.status === 201) {
+            this.getRoles();
+          }
+
+          // 关闭对话框
+          this.addFormVisible = false;
+        } else {
+          // 失败
+          this.$message.warning("请正确输入数据");
+          return false;
+        }
+      });
     }
   },
   // 接口调用
