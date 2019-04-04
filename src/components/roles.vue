@@ -16,9 +16,9 @@
 
       <el-table-column label="操作">
         <!-- scope 是一个名字 -->
-        <template>
+        <template slot-scope="scope">
           <!-- 我们可以通过scope.$index 获取索引 scope.row获取这一行的数据 -->
-          <el-button type="primary" size="mini" icon="el-icon-edit" plain></el-button>
+          <el-button type="primary"  @click="enterEdit(scope.row)" size="mini" icon="el-icon-edit" plain></el-button>
           <el-button type="danger" size="mini" icon="el-icon-delete" plain></el-button>
           <el-button type="warning" size="mini" icon="el-icon-check" plain></el-button>
         </template>
@@ -39,6 +39,21 @@
         <el-button type="primary" @click="submitAdd('addForm')">确 定</el-button>
       </div>
     </el-dialog>
+    <!-- 编辑对话框 -->
+    <el-dialog title="编辑角色" :visible.sync="editFormVisible">
+      <el-form :model="editForm" ref="editForm" :rules="rules">
+        <el-form-item label="角色名称" prop="roleName" label-width="100">
+          <el-input v-model="editForm.roleName" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="角色描述" label-width="100">
+          <el-input v-model="editForm.roleDesc" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="editFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitEdit('editForm')">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -51,8 +66,14 @@ export default {
       roleList: [{}, {}],
       // 标记字段
       addFormVisible: false,
+      editFormVisible: false,
       // 新增的表单
       addForm: {
+        roleName: "",
+        roleDesc: ""
+      },
+      // 编辑的表单
+      editForm: {
         roleName: "",
         roleDesc: ""
       },
@@ -84,6 +105,40 @@ export default {
 
           // 关闭对话框
           this.addFormVisible = false;
+        } else {
+          // 失败
+          this.$message.warning("请正确输入数据");
+          return false;
+        }
+      });
+    },
+    // 进入编辑状态
+    async enterEdit(row) {
+      // console.log(row);
+      let res = await this.$axios.get(`roles/${row.id}`);
+      // console.log(res);
+      this.editForm.id = res.data.data.roleId;
+      this.editForm.roleName = res.data.data.roleName;
+      this.editForm.roleDesc = res.data.data.roleDesc;
+      // 弹框
+      this.editFormVisible = true;
+    },
+    // 提交编辑
+    submitEdit(formName) {
+      this.$refs[formName].validate(async valid => {
+        if (valid) {
+          // 验证成功
+          let res = await this.$axios.put(
+            `roles/${this.editForm.id}`,
+            this.editForm
+          );
+          // console.log(res);
+          if (res.data.meta.status === 200) {
+            this.getRoles();
+          }
+
+          // 关闭对话框
+          this.editFormVisible = false;
         } else {
           // 失败
           this.$message.warning("请正确输入数据");
